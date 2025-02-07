@@ -1,0 +1,126 @@
+<!--product.html-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Магазин</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
+</head>
+<body>
+    <div style="display: flex;">
+        <header>
+            <a href="{% url 'index' %}" class="logo">МАЛИНА</a>
+            <nav class="nav">
+                <div class="left-nav">
+                    <a href="{% url 'index' %}">Дом</a>
+                    <p style="margin: 2px;"></p>
+                    <a href="{% url 'basket' %}">Корзина</a>
+                </div>
+                <div class="right-nav">
+                    <a href="{% url 'user_profile' %}">Аккаунт</a>
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                </div>
+            </nav>
+        </header>
+
+        <div class="content">
+            <aside class="left-panel">
+                <nav>
+                    <h3 style="color: #FE6F6F; text-align: center;padding-top: 50px;font-size: 25px;font-weight: 800;">Популярные категории</h3>
+                    <div class="categories" style="padding: 15px;padding-left: 70px;">
+                        {% for category in popular_categories %}
+                            <div style="display: flex;">
+                                {% if category.id %}
+                                    <a href="{% url 'category_detail' category.id %}" style="padding-top:10px;padding-left: 20px;font-size: 30px;">
+                                {% else %}
+                                    <a href="{% url 'category_detail' %}" style="padding-top:10px;padding-left: 20px;font-size: 30px;">
+                                {% endif %}
+                                    <img src="{{ category.image.url }}" alt="{{ category.name }}" width="50px">
+                                    <d style="color: #c45353;font-weight: 600;">{{ category.name }}</d>  
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </nav>
+            </aside>
+        </div>
+
+        <block-main style="display: block;">
+            <div class="product-content" style="margin-left: 280px;margin-top: 100px;" >
+                <div class="product-detail" style="margin: 10px;margin-left: 50px;min-width: 800px;max-width: 1000px;text-align:left">
+                    <br>
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300" height="300" style="border-radius: 50px;">
+                    <h1 style="color: brown;font-weight: 900; background-color: #fe6f6f7c;padding: 5px;border-radius: 10px;">{{ product.name }}</h1>
+                    <br><br>
+                    <div class="descrip-detail">
+                        <strong style="font-weight: 900;font-size: 25px;">Описание:</strong><br><br>
+                        <p>{{ product.description }}</p>
+                        <br><br>
+                        <strong style="font-weight: 900;font-size: 25px;">Характеристики:</strong><br><br>
+                        <p><strong>Производитель:</strong> {{ product.manufacturer }}</p><br>
+                        <p><strong>Дата выпуска:</strong> {{ product.release_date }}</p><br>
+                        <p><strong>Страна:</strong> {{ product.country_of_origin }}</p><br>
+                        {% if product.add_info %}
+                            <p><strong>Дополнительная информация:</strong> {{ product.add_info }}</p>
+                        {% endif %}
+
+                    </div>
+                    <div class="reviews-section">
+                        <h2>Отзывы</h2>
+                        <br>
+                        {% if reviews %}
+                            {% for review in reviews %}
+                                <div class="review" >
+                                    <p><strong style="color: #c45353;font-weight: 800;">{{ review.user.username }}</strong> ({{ review.created_at|date:"d.m.Y H:i" }})<span> | </span><strong>Оценка: {{ review.rating }}</strong></p>
+                                    <p>{{ review.text }}</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>Отзывов пока нет. Будьте первым!</p>
+                        {% endif %}
+                    
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_review' product.id %}" style="margin-top: 20px;">
+                                {% csrf_token %}
+                                
+                                <label for="rating">Оценка:</label>
+                                <select name="rating" id="rating" required>
+                                    <option value="5">★★★★★ (5)</option>
+                                    <option value="4">★★★★☆ (4)</option>
+                                    <option value="3">★★★☆☆ (3)</option>
+                                    <option value="2">★★☆☆☆ (2)</option>
+                                    <option value="1">★☆☆☆☆ (1)</option>
+                                </select>
+                            
+                                <textarea name="text" rows="3" placeholder="Напишите свой отзыв..." required style="width: 100%;"></textarea>
+                            
+                                <button type="submit" style="margin-top: 10px;">Оставить отзыв</button>
+                            </form>
+                        
+                        {% else %}
+                            <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить отзыв.</p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="add-in-basket">
+                <a href="{% url 'add_to_cart' product_id=product.id %}">
+                    <img src="{% static 'images/shopping.png' %}" width="100px">
+                </a>
+            </div>
+            <div class="product-price-fixed">
+                <h2>Цена:</h2>
+                <p style="text-align: center;">{{ product.price }} ₸</p>
+            </div>
+        </block-main>
+    </div>
+    <footer>
+        <p>&copy; 2025 Game Store. Все права защищены.</p>
+    </footer>
+</body>
+</html>
