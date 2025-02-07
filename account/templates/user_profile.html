@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div style="display: flex;">
+        <header>
+            <a href="{% url 'index' %}" class="logo">МАЛИНА</a>
+
+            <nav class="nav">
+                <div class="left-nav">
+                    <a href="{% url 'index' %}">Дом</a>
+                    <p style="margin: 2px;"></p>
+                    <a href="{% url 'basket' %}">Корзина</a>
+                </div>
+                <div class="right-nav">
+                    <a href="{% url 'user_profile' %}">Аккаунт</a>
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                </div>
+            </nav>
+        </header>
+        <div style="display: block;margin-top: 100px;width: 100vw;margin-left: 100px;">
+            <br>
+            <h1 style="text-align: center; color: #FE6F6F; font-weight: 900;">Профиль</h1>
+            <br>
+            <section class="profile">
+                <div class="profile-info">
+                    <h1 style="text-align: center; color: #A63838;font-weight: 800;">{{ user.username }}</h1>
+                    <br>
+                    <hr style="border-color: #980000;width: 80%; margin: auto;">
+                    <br>
+                    <div style="display: flex;">
+                        <p style="color: #FE6F6F;font-weight: bold;margin-left: 55px; font-size: 20px;">Номер телефона:</p><p style="font-size: 20px;font-weight:100;color: #980000;margin-left: 27%;">{{ user.phone_number }}</p>
+                    </div>
+                    <br><br>
+                    <div style="display: flex;">
+                        <p style="color: #FE6F6F;font-weight: bold;margin-left: 55px; font-size: 20px;">Почта:</p><p style="font-size: 20px;font-weight:100;color: #980000;margin-left: 27%;">{{ user.email }}</p>
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <a href="{% url 'edit_profile' %}" style="text-decoration: none;">
+                            <button type="button" id="button_prof">
+                                <img src="{% static 'images/edit.png' %}" style="vertical-align: middle;"> Редактировать информацию
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="profile-orders">
+                    <h2>Ваши отзывы</h2>
+                    <div class="profile-reviews">
+                        {% if reviews %}
+                            <ul>
+                                {% for review in reviews %}
+                                    <div class="review-box">
+                                        <strong>Товар:</strong> 
+                                        <a href="{% url 'product_detail' review.product.id %}">{{ review.product.name }}</a>
+                                        <br>
+                                        <strong>Оценка:</strong> ⭐{{ review.rating }}/5
+                                        <br>
+                                        <strong>Текст:</strong> {{ review.text }}
+                                        <br>
+                                        <small style="margin-bottom: 20px;">Дата: {{ review.created_at|date:"d.m.Y H:i" }}</small>
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>Вы еще не оставляли отзывов.</p>
+                        {% endif %}
+                    </div>                    
+                </div>
+            </section>
+            <br><br>
+            <a href="{% url 'logout' %}" style="color: #980000;text-align: center;font-size: 30px;margin-left: 46%;font-weight: 900;">Выйти</a>
+        </div>
+    </div>
+</body>
+</html>

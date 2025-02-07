@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div style="display: flex;">
+        <header>
+            <a href="{% url 'index' %}" class="logo">МАЛИНА</a>
+
+            <nav class="nav">
+                <div class="left-nav">
+                    <a href="{% url 'index' %}">Дом</a>
+                    <p style="margin: 2px;"></p>
+                    <a href="{% url 'basket' %}">Корзина</a>
+                </div>
+                <div class="right-nav">
+                    <a href="{% url 'user_profile' %}">Аккаунт</a>
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-register" style="width: 100%;margin-left: 100px;">
+            <div class="main-content-register">
+                <div class="register-section">
+                    <h1 style="text-align: center; font-size: 45;margin-top: 10px; color: #FE6F6F;font-weight: 800;">ВОЙТИ</h1>
+                    <br>
+                    <hr style="border-color: #980000;">
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+
+                        <label for="username" style="color: #980000; font-weight: 700;">Имя пользователя:</label><br>
+                        <div style="margin-top: 10px;">
+                            <input type="text" id="username" name="username" required>
+                        </div><br>
+                    
+                        <label for="password" style="color: #980000; font-weight: 700;">Пароль:</label><br>
+                        <div style="margin-top: 10px;">
+                            <input type="password" id="password" name="password" required>
+                        </div><br>
+
+                        <button type="submit">Войти</button>
+                        <br><br>
+                        <p style="text-align: center;color: #FE6F6F;">Нет аккаунта? <a href="{% url 'register' %}" style="color: #A63838;font-weight: bold;">Зарегистрируйтесь</a></p>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    <li class="message {{ message.tags }}">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

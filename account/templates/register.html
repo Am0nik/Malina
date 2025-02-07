@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css">
+</head>
+<body>
+    <div style="display: flex;">
+        <header>
+            <a href="{% url 'index' %}" class="logo">МАЛИНА</a>
+
+            <nav class="nav">
+                <div class="left-nav">
+                    <a href="{% url 'index' %}">Дом</a>
+                    <p style="margin: 2px;"></p>
+                    <a href="{% url 'basket' %}">Корзина</a>
+                </div>
+                <div class="right-nav">
+                    <a href="{% url 'user_profile' %}">Аккаунт</a>
+                    <a href="{% url 'login' %}">Вход</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-register" style="width: 100%;margin-left: 100px;">
+            <div class="main-content-register">
+                <div class="register-section">
+                    <h1 style="text-align: center; font-size: 45;margin-top: 10px; color: #FE6F6F;font-weight: 800;">РЕГИСТРАЦИЯ</h1>
+                    <br>
+                    <hr style="border-color: #980000;">
+                    <form action="{% url 'register' %}" method="post" >
+                        {% csrf_token %}
+                    
+                        <label for="username" style="color: #980000; font-weight: 700;">Имя пользователя:</label><br>
+                        <div style="margin-top: 10px;">
+                            {{ form.username }}
+                        </div>
+                        <br>
+                    
+                        <label for="email" style="color: #980000; font-weight: 700;">Email:</label><br>
+                        <div style="margin-top: 10px;">
+                            {{ form.email }}
+                        </div>
+                        <br>
+                    
+                        <label for="phone_number" style="color: #980000; font-weight: 700;">Номер телефона:</label><br>
+                        <div style="margin-top: 10px;">
+                            {{ form.phone_number }}
+                        </div>
+                        <br>
+                    
+                        <label for="password" style="color: #980000; font-weight: 700;">Пароль:</label><br>
+                        <div style="margin-top: 10px;">
+                            {{ form.password }}
+                        </div>
+
+                        <button type="submit" style="margin-top: 20px;">Зарегистрироваться</button>
+
+                        {% if form.errors %}
+                            <div class="messages">
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li class="message">{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </form>
+
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li class="message {{ message.tags }}" style="margin-bottom: 20px;">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
